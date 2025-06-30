@@ -1,0 +1,56 @@
+name: ci
+
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    name: Build and publish library
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+          aws-region: eu-west-1
+
+      - name: Install dependencies and test
+        run: |
+          npm ci
+          npm run test
+
+      - name: Generate CDK
+        working-directory: ./cdk
+        run: |
+          npm ci
+          npm test
+          npm run synth
+
+      - name: Upload to Riff-Raff
+        uses: guardian/actions-riff-raff@v4
+        with:
+          roleArn: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          projectName: cql::cql-lambda
+          configPath: ./cdk/cdk.out/riff-raff.yaml
+          contentDirectories: |
+            cdk.out:
+                - ./cdk/cdk.out/ContentAggregation-euwest-1-CODE.template.json
+                - ./cdk/cdk.out/ContentAggregation-euwest-1-PROD.template.json
+            content-aggregation:
+                - ./lambda
