@@ -27,136 +27,6 @@ exports[`The ContentAggregation stack matches the snapshot 1`] = `
     },
   },
   "Resources": {
-    "Connection89AD5CF5": {
-      "DeletionPolicy": "Delete",
-      "Properties": {
-        "RedrivePolicy": {
-          "deadLetterTargetArn": {
-            "Fn::GetAtt": [
-              "DLQ581697C4",
-              "Arn",
-            ],
-          },
-          "maxReceiveCount": 1,
-        },
-        "Tags": [
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/content-aggregation",
-          },
-          {
-            "Key": "Stack",
-            "Value": "flexible",
-          },
-          {
-            "Key": "Stage",
-            "Value": "TEST",
-          },
-        ],
-      },
-      "Type": "AWS::SQS::Queue",
-      "UpdateReplacePolicy": "Delete",
-    },
-    "ConnectionContentAggregationtagaggregationtopic1D39E3E583B82066": {
-      "DependsOn": [
-        "ConnectionPolicyCCB96DD5",
-      ],
-      "Properties": {
-        "Endpoint": {
-          "Fn::GetAtt": [
-            "Connection89AD5CF5",
-            "Arn",
-          ],
-        },
-        "Protocol": "sqs",
-        "TopicArn": {
-          "Ref": "tagaggregationtopicF9E62E4D",
-        },
-      },
-      "Type": "AWS::SNS::Subscription",
-    },
-    "ConnectionPolicyCCB96DD5": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sqs:*",
-              "Condition": {
-                "Bool": {
-                  "aws:SecureTransport": "false",
-                },
-              },
-              "Effect": "Deny",
-              "Principal": {
-                "AWS": "*",
-              },
-              "Resource": {
-                "Fn::GetAtt": [
-                  "Connection89AD5CF5",
-                  "Arn",
-                ],
-              },
-            },
-            {
-              "Action": "sqs:SendMessage",
-              "Condition": {
-                "ArnEquals": {
-                  "aws:SourceArn": {
-                    "Ref": "tagaggregationtopicF9E62E4D",
-                  },
-                },
-              },
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "sns.amazonaws.com",
-              },
-              "Resource": {
-                "Fn::GetAtt": [
-                  "Connection89AD5CF5",
-                  "Arn",
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Queues": [
-          {
-            "Ref": "Connection89AD5CF5",
-          },
-        ],
-      },
-      "Type": "AWS::SQS::QueuePolicy",
-    },
-    "DLQ581697C4": {
-      "DeletionPolicy": "Delete",
-      "Properties": {
-        "Tags": [
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/content-aggregation",
-          },
-          {
-            "Key": "Stack",
-            "Value": "flexible",
-          },
-          {
-            "Key": "Stage",
-            "Value": "TEST",
-          },
-        ],
-      },
-      "Type": "AWS::SQS::Queue",
-      "UpdateReplacePolicy": "Delete",
-    },
     "contentaggregationlambda162D5E2E": {
       "DependsOn": [
         "contentaggregationlambdaServiceRoleDefaultPolicy65D952F8",
@@ -384,6 +254,138 @@ exports[`The ContentAggregation stack matches the snapshot 1`] = `
         ],
       },
       "Type": "AWS::IAM::Policy",
+    },
+    "tagaggre3AC7B892": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "QueueName": "content-aggregation-tags",
+        "RedrivePolicy": {
+          "deadLetterTargetArn": {
+            "Fn::GetAtt": [
+              "tagaggregationdlq4D353BA9",
+              "Arn",
+            ],
+          },
+          "maxReceiveCount": 1,
+        },
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/content-aggregation",
+          },
+          {
+            "Key": "Stack",
+            "Value": "flexible",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::SQS::Queue",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "tagaggreContentAggregationtagaggregationtopic1D39E3E5BBCC780C": {
+      "DependsOn": [
+        "tagaggrePolicy392F33C4",
+      ],
+      "Properties": {
+        "Endpoint": {
+          "Fn::GetAtt": [
+            "tagaggre3AC7B892",
+            "Arn",
+          ],
+        },
+        "Protocol": "sqs",
+        "TopicArn": {
+          "Ref": "tagaggregationtopicF9E62E4D",
+        },
+      },
+      "Type": "AWS::SNS::Subscription",
+    },
+    "tagaggrePolicy392F33C4": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sqs:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false",
+                },
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*",
+              },
+              "Resource": {
+                "Fn::GetAtt": [
+                  "tagaggre3AC7B892",
+                  "Arn",
+                ],
+              },
+            },
+            {
+              "Action": "sqs:SendMessage",
+              "Condition": {
+                "ArnEquals": {
+                  "aws:SourceArn": {
+                    "Ref": "tagaggregationtopicF9E62E4D",
+                  },
+                },
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "sns.amazonaws.com",
+              },
+              "Resource": {
+                "Fn::GetAtt": [
+                  "tagaggre3AC7B892",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Queues": [
+          {
+            "Ref": "tagaggre3AC7B892",
+          },
+        ],
+      },
+      "Type": "AWS::SQS::QueuePolicy",
+    },
+    "tagaggregationdlq4D353BA9": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "QueueName": "content-aggregation-tags-dql",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/content-aggregation",
+          },
+          {
+            "Key": "Stack",
+            "Value": "flexible",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::SQS::Queue",
+      "UpdateReplacePolicy": "Delete",
     },
     "tagaggregationtopicF9E62E4D": {
       "Properties": {

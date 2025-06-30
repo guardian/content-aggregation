@@ -32,9 +32,12 @@ export class ContentAggregation extends GuStack {
 			topicName: 'tag-aggregations',
 		});
 
-		const tagAggregationSqsDlq = new Queue(this, 'DLQ');
-		const tagAggregationSqs = new Queue(this, 'Connection', {
+		const tagAggregationSqsDlq = new Queue(this, 'tag-aggregation-dlq', {
+      queueName: "content-aggregation-tags-dql"
+    });
+		const tagAggregationSqs = new Queue(this, 'tag-aggre', {
 			enforceSSL: true,
+      queueName: "content-aggregation-tags",
 			deadLetterQueue: {
 				queue: tagAggregationSqsDlq,
 				maxReceiveCount: 1,
