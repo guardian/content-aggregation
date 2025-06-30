@@ -1,17 +1,17 @@
 // ----- Types ----- //
 
-enum ResultKind {
-  Ok,
-  Err,
-}
+const ResultKind = {
+  Ok: "Ok",
+  Err: "Err",
+} as const;
 
 type Ok<A> = {
-  kind: ResultKind.Ok;
+  kind: typeof ResultKind.Ok;
   value: A;
 };
 
 type Err<E> = {
-  kind: ResultKind.Err;
+  kind: typeof ResultKind.Err;
   err: E;
 };
 

@@ -1,12 +1,12 @@
 import { PublishCommand, SNSClient } from "@aws-sdk/client-sns";
-import { err, ok } from "./result.js";
+import { err, ok } from "./result.ts";
 
 export const publishEntityCountsToSNS = async (
   entityToCountMap: Record<string, number>,
-  TopicArn: string
+  TopicArn: string,
+  client: SNSClient
 ) => {
   console.log(`Pushing ${JSON.stringify(entityToCountMap)} to ${TopicArn}`);
-  const client = new SNSClient({ region: "eu-west-1" });
   const command = new PublishCommand({
     Message: JSON.stringify(entityToCountMap),
     TopicArn,

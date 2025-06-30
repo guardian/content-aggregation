@@ -1,7 +1,8 @@
-import { TagsResponse } from "@guardian/content-api-models/v1/tagsResponse.js";
-import { logFetch } from "./utils.js";
-import { SearchResponse } from "@guardian/content-api-models/v1/searchResponse.js";
-import { err, ok, Result } from "./result.js";
+import type { TagsResponse } from "@guardian/content-api-models/v1/tagsResponse.js";
+import type { SearchResponse } from "@guardian/content-api-models/v1/searchResponse.js";
+import type { Result } from "./result.ts";
+import { logFetch } from "./utils.ts";
+import { err, ok } from "./result.ts";
 
 export const fetchEntities = async ({
   currentPage,
