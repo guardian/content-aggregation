@@ -2,10 +2,11 @@
   "name": "content-aggregation",
   "version": "1.0.0",
   "description": "A service to poll CAPI for entity counts, and push them to their owning services to make them generally available",
-  "main": "index.ts",
+  "main": "dist/index.js",
   "type": "module",
   "scripts": {
     "test": "API_URL=\"https://api-url.com\" API_KEY=api-key PAGE_SIZE=1 SNS_TOPIC_ARN=topic-arn node --experimental-strip-types --experimental-test-module-mocks --test ./src/**/*.spec.ts",
+    "build": "esbuild --bundle --platform=node --target=node22 --outdir=dist/ src/index.ts",
     "types": "tsc"
   },
   "license": "MIT",
@@ -15,6 +16,7 @@
   },
   "devDependencies": {
     "@guardian/content-api-models": "^29.0.0",
-    "@types/aws-lambda": "^8.10.150"
+    "@types/aws-lambda": "^8.10.150",
+    "esbuild": "^0.25.5"
   }
 }

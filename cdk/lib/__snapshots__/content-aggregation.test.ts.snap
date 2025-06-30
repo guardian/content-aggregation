@@ -167,7 +167,7 @@ exports[`The ContentAggregation stack matches the snapshot 1`] = `
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "flexible/TEST/content-aggregation/src/index.ts",
+          "S3Key": "flexible/TEST/content-aggregation/index.js",
         },
         "Environment": {
           "Variables": {
@@ -324,7 +324,7 @@ exports[`The ContentAggregation stack matches the snapshot 1`] = `
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/flexible/TEST/content-aggregation/src/index.ts",
+                      "/flexible/TEST/content-aggregation/index.js",
                     ],
                   ],
                 },

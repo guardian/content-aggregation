@@ -32,10 +32,10 @@ jobs:
           aws-region: eu-west-1
 
       - name: Install dependencies and test
-        working-directory: ./lambda
         run: |
           npm ci
           npm run test
+          npm run build
 
       - name: Generate CDK
         working-directory: ./cdk
@@ -56,4 +56,4 @@ jobs:
                 - ./cdk/cdk.out/ContentAggregation-euwest-1-CODE.template.json
                 - ./cdk/cdk.out/ContentAggregation-euwest-1-PROD.template.json
             content-aggregation:
-                - ./lambda
+                - ./dist

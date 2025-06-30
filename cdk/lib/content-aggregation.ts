@@ -49,7 +49,7 @@ export class ContentAggregation extends GuStack {
 			handler: 'index.handler',
 			functionName: `content-aggregation-${this.stage}`,
 			runtime: Runtime.NODEJS_22_X,
-			fileName: 'src/index.ts',
+			fileName: 'index.js',
 			environment: {
 				API_URL: apiUrl,
 				API_KEY: apiKey.valueAsString,
