@@ -49,7 +49,7 @@ jobs:
         with:
           roleArn: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
-          projectName: cql::cql-lambda
+          projectName: editorial-tools:content-aggregation
           configPath: ./cdk/cdk.out/riff-raff.yaml
           contentDirectories: |
             cdk.out:
