@@ -30,6 +30,7 @@ jobs:
           aws-region: eu-west-1
 
       - name: Install dependencies and test
+        working-directory: ./lambda
         run: |
           npm ci
           npm run test
