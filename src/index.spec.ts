@@ -1,6 +1,6 @@
 import { afterEach, describe, it, mock } from "node:test";
 import assert from "node:assert";
-import { PublishCommand, SNSClient } from "@aws-sdk/client-sns";
+import { SNSClient } from "@aws-sdk/client-sns";
 import { createHandler } from "./index.ts";
 import { httpFixtures } from "./fixtures/http.ts";
 

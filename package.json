@@ -5,7 +5,8 @@
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "test": "API_URL=\"https://api-url.com\" API_KEY=api-key PAGE_SIZE=1 SNS_TOPIC_ARN=topic-arn node --experimental-strip-types --experimental-test-module-mocks --test ./src/**/*.spec.ts"
+    "test": "API_URL=\"https://api-url.com\" API_KEY=api-key PAGE_SIZE=1 SNS_TOPIC_ARN=topic-arn node --experimental-strip-types --experimental-test-module-mocks --test ./src/**/*.spec.ts",
+    "types": "tsc"
   },
   "license": "MIT",
   "dependencies": {
