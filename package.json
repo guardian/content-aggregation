@@ -6,8 +6,9 @@
   "type": "module",
   "scripts": {
     "test": "API_URL=\"https://api-url.com\" API_KEY=api-key PAGE_SIZE=1 SNS_TOPIC_ARN=topic-arn node --experimental-strip-types --experimental-test-module-mocks --test ./src/**/*.spec.ts",
+    "types": "tsc",
     "build": "esbuild --bundle --platform=node --target=node22 --outdir=dist/ src/index.ts",
-    "types": "tsc"
+    "package": "npm run build && cd ./dist && zip -qr content-aggregation.zip ./*.js"
   },
   "license": "MIT",
   "dependencies": {

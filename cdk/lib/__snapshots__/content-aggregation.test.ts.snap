@@ -18,11 +18,11 @@ exports[`The ContentAggregation stack matches the snapshot 1`] = `
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
     "apikeyparam": {
-      "Default": "TEST/flexible/content-aggregation/content-api-key",
+      "Default": "/TEST/flexible/content-aggregation/content-api-key",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
     "pagesize": {
-      "Default": "TEST/flexible/content-aggregation/page-size",
+      "Default": "/TEST/flexible/content-aggregation/page-size",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
   },

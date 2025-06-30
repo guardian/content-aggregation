@@ -14,7 +14,7 @@ export class ContentAggregation extends GuStack {
 
 		const app = 'content-aggregation';
 
-		const paramPrefix = `${this.stage}/${this.stack}/${app}/`;
+		const paramPrefix = `/${this.stage}/${this.stack}/${app}/`;
 		const apiKey = new GuStringParameter(this, 'api-key-param', {
 			fromSSM: true,
 			default: `${paramPrefix}content-api-key`,
@@ -49,7 +49,7 @@ export class ContentAggregation extends GuStack {
 			handler: 'index.handler',
 			functionName: `content-aggregation-${this.stage}`,
 			runtime: Runtime.NODEJS_22_X,
-			fileName: 'index.js',
+			fileName: `${app}.zip`,
 			environment: {
 				API_URL: apiUrl,
 				API_KEY: apiKey.valueAsString,

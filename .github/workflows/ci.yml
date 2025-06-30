@@ -35,7 +35,7 @@ jobs:
         run: |
           npm ci
           npm run test
-          npm run build
+          npm run package
 
       - name: Generate CDK
         working-directory: ./cdk
