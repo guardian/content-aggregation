@@ -1,0 +1,19 @@
+{
+  "name": "content-aggregation",
+  "version": "1.0.0",
+  "description": "A service to poll CAPI for entity counts, and push them to their owning services to make them generally available",
+  "main": "index.ts",
+  "type": "module",
+  "scripts": {
+    "test": "test"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@aws-sdk/client-sns": "^3.839.0",
+    "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "@guardian/content-api-models": "^29.0.0",
+    "@types/aws-lambda": "^8.10.150"
+  }
+}
