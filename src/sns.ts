@@ -13,6 +13,7 @@ export const publishEntityCountsToSNS = async (
   });
   try {
     const result = await client.send(command);
+    console.log(`Pushed to ${TopicArn} with message ID ${result.MessageId}`);
     return ok(result.MessageId);
   } catch (e) {
     return err(JSON.stringify(e));
