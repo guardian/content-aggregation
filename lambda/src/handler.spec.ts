@@ -1,7 +1,7 @@
 import { afterEach, describe, it, mock } from "node:test";
 import assert from "node:assert";
 import { SNSClient } from "@aws-sdk/client-sns";
-import { createHandler } from "./index.ts";
+import { createHandler } from "./handler.ts";
 import { httpFixtures } from "./fixtures/http.ts";
 
 const MessageID = "example-message-id";
