@@ -38,7 +38,7 @@ exports[`The ContentAggregation stack matches the snapshot 1`] = `
           "Fn::Join": [
             "",
             [
-              "{"StartAt":"defineDefaults","States":{"defineDefaults":{"Next":"poll-capi","Type":"Pass","Assign":{"currentPage":1}},"poll-capi":{"Next":"ShouldContinuePolling","Retry":[{"ErrorEquals":["Lambda.ClientExecutionTimeoutException","Lambda.ServiceException","Lambda.AWSLambdaException","Lambda.SdkClientException"],"IntervalSeconds":2,"MaxAttempts":6,"BackoffRate":2}],"Type":"Task","Assign":{"currentPage.$":"$.currentPage"},"Resource":"arn:",
+              "{"StartAt":"defineDefaults","States":{"defineDefaults":{"Next":"poll-capi","Type":"Pass","Assign":{"currentPage":1}},"poll-capi":{"Next":"ShouldContinuePolling","Retry":[{"ErrorEquals":["Lambda.ClientExecutionTimeoutException","Lambda.ServiceException","Lambda.AWSLambdaException","Lambda.SdkClientException"],"IntervalSeconds":2,"MaxAttempts":6,"BackoffRate":2}],"Type":"Task","InputPath":"$.Payload","Assign":{"currentPage.$":"$.currentPage"},"Resource":"arn:",
               {
                 "Ref": "AWS::Partition",
               },

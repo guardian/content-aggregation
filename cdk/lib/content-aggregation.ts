@@ -100,6 +100,7 @@ export class ContentAggregation extends GuStack {
 
 		const pollCapiAndPublishToSNS = new LambdaInvoke(this, 'poll-capi', {
 			lambdaFunction: contentAggregationLambda,
+      inputPath: '$.Payload',
 			payload: TaskInput.fromObject({
 				'currentPage.$': '$currentPage',
 			}),
