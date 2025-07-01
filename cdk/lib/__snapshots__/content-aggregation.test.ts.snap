@@ -27,6 +27,142 @@ exports[`The ContentAggregation stack matches the snapshot 1`] = `
     },
   },
   "Resources": {
+    "ReindexingStateMachineEA8E84A5": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "ReindexingStateMachineRoleDefaultPolicy59DBA56A",
+        "ReindexingStateMachineRole711E4CAF",
+      ],
+      "Properties": {
+        "DefinitionString": {
+          "Fn::Join": [
+            "",
+            [
+              "{"StartAt":"defineDefaults","States":{"defineDefaults":{"Next":"poll-capi","Type":"Pass","Assign":{"currentPage":1}},"poll-capi":{"Next":"ShouldContinuePolling","Retry":[{"ErrorEquals":["Lambda.ClientExecutionTimeoutException","Lambda.ServiceException","Lambda.AWSLambdaException","Lambda.SdkClientException"],"IntervalSeconds":2,"MaxAttempts":6,"BackoffRate":2}],"Type":"Task","Assign":{"currentPage.$":"$.currentPage"},"Resource":"arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":states:::lambda:invoke","Parameters":{"FunctionName":"",
+              {
+                "Fn::GetAtt": [
+                  "contentaggregationlambda162D5E2E",
+                  "Arn",
+                ],
+              },
+              "","Payload":{"currentPage.$":"$currentPage"}}},"wait-for-throughput":{"Type":"Wait","Seconds":1,"Next":"poll-capi"},"ShouldContinuePolling":{"Type":"Choice","Choices":[{"Variable":"$.Payload.resultCount","StringLessThan":"",
+              {
+                "Ref": "pagesize",
+              },
+              "","Next":"Reindex complete"}],"Default":"wait-for-throughput"},"Reindex complete":{"Type":"Succeed"}},"TimeoutSeconds":900}",
+            ],
+          ],
+        },
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "ReindexingStateMachineRole711E4CAF",
+            "Arn",
+          ],
+        },
+        "StateMachineName": "content-aggregation-state-machine-tags",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/content-aggregation",
+          },
+          {
+            "Key": "Stack",
+            "Value": "flexible",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::StepFunctions::StateMachine",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "ReindexingStateMachineRole711E4CAF": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "states.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/content-aggregation",
+          },
+          {
+            "Key": "Stack",
+            "Value": "flexible",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ReindexingStateMachineRoleDefaultPolicy59DBA56A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "contentaggregationlambda162D5E2E",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "contentaggregationlambda162D5E2E",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ReindexingStateMachineRoleDefaultPolicy59DBA56A",
+        "Roles": [
+          {
+            "Ref": "ReindexingStateMachineRole711E4CAF",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
     "contentaggregationlambda162D5E2E": {
       "DependsOn": [
         "contentaggregationlambdaServiceRoleDefaultPolicy65D952F8",
@@ -255,7 +391,51 @@ exports[`The ContentAggregation stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Policy",
     },
-    "tagaggre3AC7B892": {
+    "tagaggregationdlq4D353BA9": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "QueueName": "content-aggregation-tags-dlq",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/content-aggregation",
+          },
+          {
+            "Key": "Stack",
+            "Value": "flexible",
+          },
+          {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::SQS::Queue",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "tagaggregationsqsContentAggregationtagaggregationtopic1D39E3E5A613761B": {
+      "DependsOn": [
+        "tagaggregationsqsPolicy016298D7",
+      ],
+      "Properties": {
+        "Endpoint": {
+          "Fn::GetAtt": [
+            "tagaggregationsqsE06082C8",
+            "Arn",
+          ],
+        },
+        "Protocol": "sqs",
+        "TopicArn": {
+          "Ref": "tagaggregationtopicF9E62E4D",
+        },
+      },
+      "Type": "AWS::SNS::Subscription",
+    },
+    "tagaggregationsqsE06082C8": {
       "DeletionPolicy": "Delete",
       "Properties": {
         "QueueName": "content-aggregation-tags",
@@ -290,25 +470,7 @@ exports[`The ContentAggregation stack matches the snapshot 1`] = `
       "Type": "AWS::SQS::Queue",
       "UpdateReplacePolicy": "Delete",
     },
-    "tagaggreContentAggregationtagaggregationtopic1D39E3E5BBCC780C": {
-      "DependsOn": [
-        "tagaggrePolicy392F33C4",
-      ],
-      "Properties": {
-        "Endpoint": {
-          "Fn::GetAtt": [
-            "tagaggre3AC7B892",
-            "Arn",
-          ],
-        },
-        "Protocol": "sqs",
-        "TopicArn": {
-          "Ref": "tagaggregationtopicF9E62E4D",
-        },
-      },
-      "Type": "AWS::SNS::Subscription",
-    },
-    "tagaggrePolicy392F33C4": {
+    "tagaggregationsqsPolicy016298D7": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -325,7 +487,7 @@ exports[`The ContentAggregation stack matches the snapshot 1`] = `
               },
               "Resource": {
                 "Fn::GetAtt": [
-                  "tagaggre3AC7B892",
+                  "tagaggregationsqsE06082C8",
                   "Arn",
                 ],
               },
@@ -345,7 +507,7 @@ exports[`The ContentAggregation stack matches the snapshot 1`] = `
               },
               "Resource": {
                 "Fn::GetAtt": [
-                  "tagaggre3AC7B892",
+                  "tagaggregationsqsE06082C8",
                   "Arn",
                 ],
               },
@@ -355,37 +517,11 @@ exports[`The ContentAggregation stack matches the snapshot 1`] = `
         },
         "Queues": [
           {
-            "Ref": "tagaggre3AC7B892",
+            "Ref": "tagaggregationsqsE06082C8",
           },
         ],
       },
       "Type": "AWS::SQS::QueuePolicy",
-    },
-    "tagaggregationdlq4D353BA9": {
-      "DeletionPolicy": "Delete",
-      "Properties": {
-        "QueueName": "content-aggregation-tags-dql",
-        "Tags": [
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/content-aggregation",
-          },
-          {
-            "Key": "Stack",
-            "Value": "flexible",
-          },
-          {
-            "Key": "Stage",
-            "Value": "TEST",
-          },
-        ],
-      },
-      "Type": "AWS::SQS::Queue",
-      "UpdateReplacePolicy": "Delete",
     },
     "tagaggregationtopicF9E62E4D": {
       "Properties": {

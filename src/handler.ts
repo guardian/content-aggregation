@@ -5,19 +5,19 @@ import { ResultKind } from "./result.ts";
 import { publishEntityCountsToSNS as pushEntityCountsToSns } from "./sns.ts";
 
 type StepFnInput = {
-  currentPage: number | undefined;
+  nextPage: number | undefined;
 };
 
 type LambdaOutput = {
+  nextPage: number;
   resultCount: number;
   entityToCountMap: Record<string, number>;
 };
 
 export const createHandler =
   (snsClient: SNSClient) =>
-  async ({ currentPage: _currentPage }: StepFnInput): Promise<LambdaOutput> => {
-    if (_currentPage === undefined) {
-      console.log({ _currentPage });
+  async ({ nextPage: _nextPage }: StepFnInput): Promise<LambdaOutput> => {
+    if (_nextPage === undefined) {
       throw new Error(
         "The lambda was invoked without a value for `currentPage`"
       );
@@ -27,7 +27,7 @@ export const createHandler =
     const apiKey = getApiKey();
     const pageSize = getPageSize();
     const snsTopic = getSnsTopicArn();
-    const currentPage = _currentPage ?? 1;
+    const currentPage = _nextPage ?? 1;
 
     const maybeEntities = await fetchEntities({
       apiUrl,
@@ -41,9 +41,10 @@ export const createHandler =
     }
 
     const { value: entityToCountMap } = maybeEntities;
+    const nextPage = currentPage + 1;
 
     if (Object.keys(entityToCountMap).length === 0) {
-      return { resultCount: 0, entityToCountMap: {} };
+      return { nextPage, resultCount: 0, entityToCountMap: {} };
     }
 
     const maybeSnsResult = await pushEntityCountsToSns(
@@ -57,6 +58,7 @@ export const createHandler =
     }
 
     return {
+      nextPage,
       resultCount: Object.keys(entityToCountMap).length,
       entityToCountMap,
     };

@@ -31,11 +31,12 @@ describe("Lambda handler", () => {
 
   it("should get a page's worth of tag counts, write them to SNS, and give the output", async () => {
     const handler = createHandler(snsClient);
-    const result = await handler({ currentPage: 1 });
+    const result = await handler({ nextPage: 1 });
 
     assert.equal(snsSendSpy.mock.callCount(), 1);
     assert.deepEqual(result, {
       resultCount: 1,
+      nextPage: 2,
       entityToCountMap: {
         "2019-family-gift-guide/2019-family-gift-guide": 1,
       },
@@ -44,9 +45,9 @@ describe("Lambda handler", () => {
 
   it("should pass back an empty object if there are no results, and not make a call the SNS", async () => {
     const handler = createHandler(snsClient);
-    const result = await handler({ currentPage: 2 });
+    const result = await handler({ nextPage: 2 });
 
     assert.equal(snsSendSpy.mock.callCount(), 0);
-    assert.deepEqual(result, { resultCount: 0, entityToCountMap: {} });
+    assert.deepEqual(result, { resultCount: 0, nextPage: 3, entityToCountMap: {} });
   });
 });
