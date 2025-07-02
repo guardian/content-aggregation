@@ -37,3 +37,5 @@ flowchart
     TM[Tag Manager] --"writes to"--> C[CAPI] --"reads from"--> CA[Content aggregation lambda] 
     CA --"map of tags to doc counts"--> SNS[SNS]
 ```
+
+We use an event queue to avoid applying write pressure to the owning service, which can then pull records at its convenience.
